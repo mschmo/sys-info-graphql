@@ -1,0 +1,16 @@
+[package]
+name = "sys-info-graphql"
+version = "0.1.0"
+authors = ["Matthew Schmoyer <mattschmo@gmail.com>"]
+
+[dependencies]
+iron = "0.5.1"
+libc = "0.2"
+sys-info = "0.5.1"
+# systemstat seems like a better crate for system info, having a few
+# more features and written purely in Rust, as oppose to the unsafe C
+# code sys-info. However it does not currently support Mac OS.
+# systemstat = "0.1.2"
+mount = { git = "https://github.com/iron/mount.git" }
+juniper = { git = "https://github.com/graphql-rust/juniper" }
+juniper_iron = { git = "https://github.com/graphql-rust/juniper_iron" }
