@@ -36,5 +36,8 @@ fn main() {
 
     // TODO: Use cli argument instead of env var?
     let host = env::var("SYS_GQL_HOST").unwrap_or("localhost:5000".to_owned());
-    Iron::new(mount).http(host).unwrap();
+    match Iron::new(mount).http(&host) {
+        Ok(_) => println!("Server started on {}", host),
+        Err(e) => println!("Error starting server: {}", e)
+    };
 }
