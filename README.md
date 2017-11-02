@@ -19,20 +19,20 @@ Server started on localhost:5000
 
 By default the server runs on `localhost:5000`. You can modify this by setting the env var `SYS_GQL_HOST`.
 
-### Available Metrics
+### Available Types/Metrics
 
-| Metric     | Description |
+| Type       | Description |
 |------------|-------------|
-|osType      | Operating system type, such as "Linux", "Darwin", or "Windows"|
-|osRelease   | Operating system release version number|
-|hostname    | System hostname|
-|cpuCount    |Number of CPUs|
+|osType      |Operating system type, such as "Linux", "Darwin", or "Windows"|
+|osRelease   |Operating system release version number|
+|hostname    |System hostname|
+|cpuCount    |Number of processors. Equivalent to `get_nprocs` on Linux|
 |cpuSpeed    |Clock speed of the processor in MHz or GHz|
-|bootTime    |On linux this is equivelant to `/proc/uptime`|
-|procCount   |Current number of processes|
-|diskInfo    |Disk information|
-|loadAverage |Load Average|
-|memoryInfo  | Memory Information|
+|bootTime    |The uptime of the system (seconds), and the amount of time spent in idle process (seconds)|
+|procCount   |Current total number of processes|
+|diskInfo    |Overall and free disk space|
+|loadAverage |Average CPU and IO utilization of the last one, five, and 10 minute periods|
+|memoryInfo  |Information about the system's RAM usage. Note: On Mac OS X and Windows, the buffers and cached variables of the memoryInfo are zero.|
 
 ### Example
 
