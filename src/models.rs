@@ -77,6 +77,11 @@ pub struct System {
     pub cpu_num: String
 }
 
+pub struct BootTime {
+    pub up_seconds: String,
+    pub idle_seconds: String
+}
+
 impl System {
     pub fn new() -> System {
         System {
@@ -155,7 +160,7 @@ impl System {
         }
     }
 
-    pub fn get_boot_time(&self) -> String {
+    pub fn get_boot_time(&self) -> BootTime {
         let boot_time = match sys_info::boottime() {
             Ok(r) => r,
             Err(_) => timeval {
@@ -163,7 +168,10 @@ impl System {
                 tv_usec: 0
             }
         };
-        format!("{} {}", boot_time.tv_sec, boot_time.tv_usec)
+        BootTime {
+            up_seconds: boot_time.tv_sec.to_string(),
+            idle_seconds: boot_time.tv_usec.to_string()
+        }
     }
 }
 

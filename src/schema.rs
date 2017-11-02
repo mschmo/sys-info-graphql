@@ -3,7 +3,7 @@ extern crate juniper;
 use juniper::FieldResult;
 
 use super::{
-    DiskInformation, LoadAverage, System, MemoryInformation, ByteUnit, CycleUnit
+    DiskInformation, LoadAverage, System, MemoryInformation, ByteUnit, CycleUnit, BootTime
 };
 
 
@@ -130,7 +130,20 @@ graphql_object!(System: System as "Query" |&self| {
         self.get_proc_total()
     }
 
-    field boot_time(&executor) -> String as "System boot time. Seconds system has been up and seconds that the machine has spend idle." {
+    field boot_time(&executor) -> BootTime as "System boot time." {
         self.get_boot_time()
     }
+});
+
+graphql_object!(BootTime: System as "BootTime" |&self| {
+    description: "The boot time of the system"
+
+    field up_seconds() -> FieldResult<&String> as "The total number of seconds the system has been up" {
+        Ok(&self.up_seconds)
+    }
+
+    field idle_seconds() -> FieldResult<&String> as "The time the machine has spent idle, in seconds" {
+        Ok(&self.idle_seconds)
+    }
+
 });
