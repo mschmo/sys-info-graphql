@@ -13,7 +13,7 @@ use juniper::EmptyMutation;
 mod models;
 mod schema;
 use models::{
-    System, DiskInformation, LoadAverage, MemoryInformation, ByteUnit, CycleUnit
+    System, DiskInformation, LoadAverage, MemoryInformation, ByteUnit, CycleUnit, BootTime
 };
 
 

@@ -47,7 +47,11 @@ Query:
   cpuCount
   cpuSpeed(unit: GHz)
 
-  bootTime
+  bootTime {
+    upSeconds
+    idleSeconds
+  }
+  
   procCount
 
   diskInfo(unit: MB) {
@@ -82,7 +86,10 @@ Result:
     "hostname": "Matts-MacBook-Pro.local",
     "cpuCount": "4",
     "cpuSpeed": "2.70",
-    "bootTime": "1502954551 859945",
+    "bootTime": {
+      "upSeconds": "1502954551",
+      "idleSeconds": "859945"
+    },
     "procCount": "313",
     "diskInfo": {
       "free": "88766.26",
