@@ -115,8 +115,8 @@ graphql_object!(System: System as "Query" |&self| {
         &self.hostname
     }
 
-    field cpu_count(&executor) -> &String as "CPU quantity." {
-        &self.cpu_num
+    field cpu_count(&executor) -> String as "CPU quantity." {
+        self.cpu_num.to_string()
     }
 
     field cpu_speed(

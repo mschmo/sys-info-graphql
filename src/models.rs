@@ -74,40 +74,25 @@ pub struct System {
     pub os_release: String,
     pub hostname: String,
     pub cpu_speed: u64,
-    pub cpu_num: String
+    pub cpu_num: u32
 }
 
 impl System {
     pub fn new() -> System {
         System {
-            os_type: match sys_info::os_type() {
-                Ok(r) => r,
-                Err(_) => String::from("Unsupported Operating System")
-            },
-            os_release: match sys_info::os_release() {
-                Ok(r) => r,
-                Err(_) => String::from("Failed to get OS release version")
-            },
-            hostname: match sys_info::hostname() {
-                Ok(r) => r,
-                Err(_) => String::from("Failed to get host name")
-            },
-            cpu_speed: match sys_info::cpu_speed() {
-                Ok(r) => r,
-                Err(_) => 0
-            },
-            cpu_num: match sys_info::cpu_num() {
-                Ok(r) => r.to_string(),
-                Err(_) => String::from("Failed to get CPU count")
-            }
+            os_type: sys_info::os_type().unwrap_or("Unsupported Operating System".into()),
+            os_release: sys_info::os_release().unwrap_or("Failed to get OS release version".into()),
+            hostname: sys_info::hostname().unwrap_or("Failed to get host name".into()),
+            cpu_speed: sys_info::cpu_speed().unwrap_or(0),
+            cpu_num: sys_info::cpu_num().unwrap_or(0)
         }
     }
 
     pub fn get_disk_info(&self, unit: Option<ByteUnit>) -> DiskInformation {
-        let disk = match sys_info::disk_info() {
-            Ok(result) => result,
-            Err(_) => panic!("Crap.")
-        };
+        let disk = sys_info::disk_info().unwrap_or(sys_info::DiskInfo{
+            total: 0,
+            free: 0
+        });
         let conversion_rate = get_byte_conversion(unit);
         DiskInformation {
             total: convert_to_string(disk.total, conversion_rate),
@@ -117,20 +102,29 @@ impl System {
 
     pub fn get_load_average(&self) -> LoadAverage {
         match sys_info::loadavg() {
-            Ok(la) => LoadAverage {
-                one: la.one.to_string(),
-                five: la.five.to_string(),
-                fifteen: la.fifteen.to_string()
+            Ok(r) => LoadAverage {
+                one: r.one.to_string(),
+                five: r.five.to_string(),
+                fifteen: r.fifteen.to_string()
             },
-            Err(_) => panic!("Crap.")
+            Err(_) => LoadAverage {
+                one: "0".into(),
+                five: "0".into(),
+                fifteen: "0".into()
+            }
         }
     }
 
     pub fn get_memory_information(&self, unit: Option<ByteUnit>) -> MemoryInformation {
-        let mem_info = match sys_info::mem_info() {
-            Ok(result) => result,
-            Err(_) => panic!("Crap.")
-        };
+        let mem_info = sys_info::mem_info().unwrap_or(sys_info::MemInfo{
+            total: 0,
+            free: 0,
+            avail: 0,
+            buffers: 0,
+            cached: 0,
+            swap_total: 0,
+            swap_free: 0
+        });
         let conversion = get_byte_conversion(unit);
         MemoryInformation {
             total: convert_to_string(mem_info.total, conversion),
@@ -156,13 +150,10 @@ impl System {
     }
 
     pub fn get_boot_time(&self) -> String {
-        let boot_time = match sys_info::boottime() {
-            Ok(r) => r,
-            Err(_) => timeval {
-                tv_sec: 0,
-                tv_usec: 0
-            }
-        };
+        let boot_time = sys_info::boottime().unwrap_or(timeval {
+            tv_sec: 0,
+            tv_usec: 0
+        });
         format!("{} {}", boot_time.tv_sec, boot_time.tv_usec)
     }
 }
